@@ -13,7 +13,6 @@ mongoose.connect(
 
 app.use(express.json());
 app.use('/user',authRoutes);
-
-app.listen(80, ()=> console.log('Server Up. Listening to port 80.........'));
+app.listen(3000, ()=> console.log('Server Up. Listening to port 80.........'));
  
 
