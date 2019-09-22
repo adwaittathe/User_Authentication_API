@@ -8,10 +8,10 @@ router.post('/signUp', async (req,res)=>{
     
     const { error } = signUpValidation(req.body);
 
-    if(error) return res.status(400).send(error.details[0].message);
+    if(error) return res.status(400).send(error);
     
     const emailExist = await userModel.findOne({email : req.body.email});
-    if(emailExist) return res.status(400).send('Email already exist');
+    if(emailExist) return res.status(400).send('Email already exist.Try to Login..');
 
     const salt = await bcrypt.genSalt(10);
     const hashPass =  await bcrypt.hash(req.body.password , salt);
@@ -19,15 +19,22 @@ router.post('/signUp', async (req,res)=>{
     const user =  new userModel({
         firstName : req.body.firstName,
         lastName : req.body.lastName,
+        gender : req.body.gender,
+        contactNo : req.body.contactNo,
+        age : req.body.age,
         email : req.body.email,
         password : hashPass
     });
     try{
         const saveUser = await user.save();
+        const token = jwt.sign({_id : user._id}, process.env.TOKEN_KEY);
+        res.header('token', token);
         res.send({
+            token : token,
             userId : user._id,
             name : user.firstName + " " + user.lastName,
-            email : user.email
+            email : user.email,
+            contactNo : user.contactNo,
         });
     }
     catch(err){
@@ -53,7 +60,8 @@ router.post('/login', async (req,res)=>{
     res.send({
         id: user._id,
         token: token,
-        name : user.firstName + " " +  user.lastName
+        name : user.firstName + " " +  user.lastName,
+        email : user.email
     })
 
 });

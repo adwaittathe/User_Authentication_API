@@ -4,6 +4,9 @@ const signUpValidation = (data) =>{
     const schema = Joi.object({
         firstName : Joi.string().required(),
         lastName : Joi.string().required(),
+        gender : Joi.string().required(),
+        contactNo : Joi.number().required(),
+        age : Joi.number().required(),
         email : Joi.string().required().email(),
         password : Joi.string().required().min(6)
      });
