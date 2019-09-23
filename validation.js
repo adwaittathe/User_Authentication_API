@@ -5,8 +5,8 @@ const signUpValidation = (data) =>{
         firstName : Joi.string().required(),
         lastName : Joi.string().required(),
         gender : Joi.string().required(),
-        contactNo : Joi.number().required(),
-        age : Joi.number().required(),
+        contactNo : Joi.number().required().min(1000000000).max(9999999999),
+        age : Joi.number().required().min(0).max(150),
         email : Joi.string().required().email(),
         password : Joi.string().required().min(6)
      });
@@ -20,7 +20,6 @@ const loginValidation = (data) =>{
      });
      return schema.validate(data); 
 }
-
 
 module.exports.signUpValidation = signUpValidation;
 module.exports.loginValidation = loginValidation;
