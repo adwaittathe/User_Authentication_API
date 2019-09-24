@@ -3,9 +3,20 @@
 User authentication API can be used to easily authenticate users for web and mobile applications.
 
 ## Table of content
-- [Get Started](#get-started)
+* [Get Started](#get-started)
+    * [Login](#login)
+    * [SignUp](#signup)
+    * [Get User Details](#get-user-details)
+* [References](#references)
 
 ## Get Started
+User-Authentication-API can be used to login, signup user and get user specific information.
+
+### Login ###
+
+### Signup ###
+
+### Get user details ###
 
 ## References
 - [JWT](https://jwt.io) - Decode, Verify, and generate JWT
