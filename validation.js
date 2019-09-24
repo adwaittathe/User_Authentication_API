@@ -5,8 +5,8 @@ const signUpValidation = (data) =>{
         firstName : Joi.string().required(),
         lastName : Joi.string().required(),
         gender : Joi.string().required(),
-        contactNo : Joi.number().required().min(1000000000).max(9999999999),
-        age : Joi.number().required().min(0).max(150),
+        contactNo : Joi.string().required().min(10).max(10),
+        age : Joi.string().required().min(1).max(3),
         email : Joi.string().required().email(),
         password : Joi.string().required().min(6)
      });

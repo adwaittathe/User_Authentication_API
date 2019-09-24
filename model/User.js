@@ -14,15 +14,15 @@ const userSchema = new mongoose.Schema({
         required : true
     },
     contactNo: {
-        type:Number,
-        min : 1000000000,
-        max : 9999999999,
+        type:String,
+        min : 10,
+        max : 10,
         required: true
     },
     age : {
-        type:Number,
-        min : 0,
-        max : 150,
+        type:String,
+        min : 1,
+        max : 3,
         required:true
     },
     email : {
