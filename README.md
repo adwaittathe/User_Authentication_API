@@ -7,7 +7,6 @@ User authentication API can be used to easily authenticate users for mobile appl
     * [Login](#login)
     * [SignUp](#signup)
     * [Get User Details](#get-user-details)
-    * [Get User Details](#get-user-details)
     * [Update User](#update-user)
     * [Delete User](#delete-user)
 * [References](#references)
