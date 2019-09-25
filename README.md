@@ -7,18 +7,49 @@ User authentication API can be used to easily authenticate users for web and mob
     * [Login](#login)
     * [SignUp](#signup)
     * [Get User Details](#get-user-details)
+    * [Get User Details](#get-user-details)
+    * [Update User](#update-user)
+    * [Delete User](#delete-user)
 * [References](#references)
 
 ## Get Started
 User-Authentication-API can be used to login, signup user and get user specific information.
 
-### Login ###
+### Login 
+* Method - Post 
+* Request Payload - 
+   ```
+   {
+     "email" : "chandler@gmail.com",
+     "password" : "123456"
+   }
+   ```
+* Response Payload- 
+   ```{
+       "status": 200,
+       "id": "5d8b97164dfcab1a47b215ed",
+       "token":"[TOKEN]",
+       "name": "Chandler Bing",
+       "email": "chandler@gmail.com"
+   }
+   ```
 
-### Signup ###
+* Status codes -
+   * 200 - success
+   * 400 - invalid something
 
-### Get user details ###
+
+### Signup 
+
+### Get user details 
+
+### Update user
+
+### Delete user
+
 
 ## References
 - [JWT](https://jwt.io) - Decode, Verify, and generate JWT
 - [Node.js](https://nodejs.org/en/) - JavaScript runtime
 - [Express](https://expressjs.com) - Node.js web application framework
+- [@hapi/joi](https://www.npmjs.com/package/@hapi/joi) - Data validation
