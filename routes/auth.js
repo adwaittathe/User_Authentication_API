@@ -1,6 +1,6 @@
  const router = require('express').Router();
  const userModel = require('../model/User');
- const { signUpValidation, loginValidation } = require('../validation');
+ const { signUpValidation, loginValidation, updateValidation} = require('../validation');
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
  const verifyToken = require('../verifyToken');
@@ -93,6 +93,7 @@ router.get('/details', verifyToken, async(req,res)=>{
         status : res.statusCode,
         message : 'Error while finding user in database'
     });
+    
     res.send({
         status : res.statusCode,
         userId : user._id,
@@ -103,6 +104,52 @@ router.get('/details', verifyToken, async(req,res)=>{
         contactNo : user.contactNo,
         age : user.age,
         createdAt : user.createdAt
+    });
+});
+
+router.put('/update', verifyToken, async(req,res)=>{
+    const { error } = updateValidation(req.body);
+    if(error) return res.status(400).send({
+        status : res.statusCode,
+        message: error.details[0].message
+    });
+
+    const user = await userModel.findOne({_id : req.user._id});
+    if(!user) return res.status(400).send({
+        status : res.statusCode,
+        message : 'Error while finding user in database'
+    });
+
+    await userModel.findOneAndUpdate({email : user.email},
+        {
+            $set:{
+                firstName : req.body.firstName ? req.body.firstName : user.firstName,
+                lastName : req.body.lastName ? req.body.lastName : user.lastName,
+                gender : req.body.gender ? req.body.gender : user.gender,
+                contactNo : req.body.contactNo ? req.body.contactNo : user.contactNo,
+                age : req.body.age ? req.body.age : user.age,
+                email : user.email,
+                password : user.password 
+            }
+        });
+
+    res.status(200).send({
+        status: res.statusCode,
+        message : "User details updated successfully"
+    });
+});
+
+
+router.delete('/delete', verifyToken, async(req,res)=>{
+    const user = await userModel.findOne({_id : req.user._id});
+    if(!user) return res.status(400).send({
+        status : res.statusCode,
+        message : 'Error while finding user in database'
+    });
+    await userModel.deleteOne({email : user.email});
+    res.status(200).send({
+        status: res.statusCode,
+        message : "User details deleted successfully"
     });
 });
 

@@ -4,6 +4,7 @@ const authRoutes = require( './routes/auth');
 const mongoose = require('mongoose');
 const dotenv= require('dotenv');
 dotenv.config();
+mongoose.set('useFindAndModify', false);
 
 mongoose.connect(
     process.env.DB_CONNECT, { useNewUrlParser:true , useUnifiedTopology: true } , ()=>{
@@ -12,7 +13,7 @@ mongoose.connect(
 );
 
 app.use(express.json());
-app.use('/user',authRoutes);
-app.listen(3000, ()=> console.log('Server Up. Listening to port 80.........'));
+app.use('/api/user',authRoutes);
+app.listen(80, ()=> console.log('Server Up. Listening to port 80.........'));
  
 
