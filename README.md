@@ -1,6 +1,7 @@
 # User-Authentication-API
 
-User authentication API can be used to easily authenticate users for mobile applications.
+User authentication API can be used to easily authenticate users for mobile applications.\
+API's are hosted on EC2.
 
 ## Table of content
 * [Get Started](#get-started)
@@ -15,6 +16,7 @@ User authentication API can be used to easily authenticate users for mobile appl
 User-Authentication-API can be used to login, signup user and get user specific information.
 > In the examples on this page, you would replace [TOKEN] with the token returned by this API after user SignUp/Login.
 ### Login 
+> http://ec2-18-234-241-134.compute-1.amazonaws.com/api/user/login
 * Method - Post 
 * Request Payload - 
    ```
@@ -39,6 +41,7 @@ User-Authentication-API can be used to login, signup user and get user specific 
 
 
 ### Signup 
+> http://ec2-18-234-241-134.compute-1.amazonaws.com/api/user/signUp
 * Method - Post
 * Request payload - 
    ```
@@ -70,6 +73,7 @@ User-Authentication-API can be used to login, signup user and get user specific 
 
 
 ### Get user details 
+> http://ec2-18-234-241-134.compute-1.amazonaws.com/api/user/details
 * Method - Get
 * Request Payload(Header) -
 ```
@@ -96,6 +100,7 @@ User-Authentication-API can be used to login, signup user and get user specific 
    * 401 - Invalid token
 
 ### Update user
+> http://ec2-18-234-241-134.compute-1.amazonaws.com/api/user/update
 * Method - Put
 * Request Payload -
 ```
@@ -127,6 +132,7 @@ User-Authentication-API can be used to login, signup user and get user specific 
    * 401 - Invalid token
 
 ### Delete user
+> http://ec2-18-234-241-134.compute-1.amazonaws.com/api/user/delete
 * Method - Delete
 
 * Request Payload -
