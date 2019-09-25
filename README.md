@@ -1,6 +1,6 @@
 # User-Authentication-API
 
-User authentication API can be used to easily authenticate users for web and mobile applications.
+User authentication API can be used to easily authenticate users for mobile applications.
 
 ## Table of content
 * [Get Started](#get-started)
@@ -71,11 +71,80 @@ User-Authentication-API can be used to login, signup user and get user specific 
 
 
 ### Get user details 
+* Method - Get
+* Request Payload(Header) -
+```
+“token” :[TOKEN]
+```
+* Response Payload- 
+```
+{
+    "status": 200,
+    "userId": "5d8b97164dfcab1a47b215ed",
+    "firstName": "Chandler",
+    "lastName": "Bing",
+    "email": "chandler@gmail.com",
+    "gender": "Male",
+    "contactNo": "7047059630",
+    "age": "25",
+    "createdAt": "2019-09-25T16:34:30.203Z"
+}
+```
+
+* Status codes - 
+   * 200 - success
+   * 400 - Access denied. Token not provided
+   * 401 - Invalid token
 
 ### Update user
+* Method - Put
+* Request Payload -
+```
+{
+  "firstName":"Joey",
+  "lastName" : "Tribbiani",
+  "gender" : "Male",
+  "contactNo" : "7048763263",
+  "age" : "20"
+}
+```
+
+   * Header - 
+   ```
+   “token” : [TOKEN]
+   ```
+   
+* Response Payload - 
+```
+{
+    "status": 200,
+    "message": "User details updated successfully"
+}
+```
+
+* Status codes - 
+   * 200 - success
+   * 400 - User not found in the database
+   * 401 - Invalid token
 
 ### Delete user
+* Method - Delete
 
+* Request Payload -
+
+   * Header - “token” : [TOKEN]
+
+* Response Payload - 
+   ```
+   {
+    "status": 200,
+    "message": "User details deleted successfully"
+   }
+   ```
+* Status codes - 
+   * 200 - success
+   * 400 - Access Denied. Token Not provided / User not found in the database
+   * 401 - Invalid token
 
 ## References
 - [JWT](https://jwt.io) - Decode, Verify, and generate JWT
