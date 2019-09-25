@@ -36,10 +36,38 @@ User-Authentication-API can be used to login, signup user and get user specific 
 
 * Status codes -
    * 200 - success
-   * 400 - invalid something
+   * 400 - Invalid email/password
 
 
 ### Signup 
+* Method - Post
+* Request payload - 
+   ```
+   {
+     "firstName":"Chandler",
+     "lastName" : "Bing",
+     "gender" : "Male",
+     "contactNo" : "7047059630",
+     "age" : "25",
+     "email" : "chandler@gmail.com",
+     "password" : "123456"
+   }
+   ```
+* Response Payload -
+```
+{
+    "status": 200,
+    "token": [TOKEN],
+    "userId": "5d8b97164dfcab1a47b215ed",
+    "name": "Chandler Bing",
+    "email": "chandler@gmail.com",
+    "contactNo": "7047059630"
+}
+```
+* Status codes -
+   * 200 - success
+   * 400 - Bad request(Some input parameter is not provided)
+
 
 ### Get user details 
 
