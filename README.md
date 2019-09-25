@@ -13,7 +13,7 @@ User authentication API can be used to easily authenticate users for mobile appl
 
 ## Get Started
 User-Authentication-API can be used to login, signup user and get user specific information.
-
+> In the examples on this page, you would replace [TOKEN] with the token returned by this API after user SignUp/Login.
 ### Login 
 * Method - Post 
 * Request Payload - 
