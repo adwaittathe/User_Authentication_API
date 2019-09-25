@@ -54,16 +54,17 @@ User-Authentication-API can be used to login, signup user and get user specific 
    }
    ```
 * Response Payload -
-```
-{
-    "status": 200,
-    "token": [TOKEN],
-    "userId": "5d8b97164dfcab1a47b215ed",
-    "name": "Chandler Bing",
-    "email": "chandler@gmail.com",
-    "contactNo": "7047059630"
-}
-```
+   ```
+   {
+       "status": 200,
+       "token": [TOKEN],
+       "userId": "5d8b97164dfcab1a47b215ed",
+       "name": "Chandler Bing",
+       "email": "chandler@gmail.com",
+       "contactNo": "7047059630"
+   }
+   ```
+   
 * Status codes -
    * 200 - success
    * 400 - Bad request(Some input parameter is not provided)
