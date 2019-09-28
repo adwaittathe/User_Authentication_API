@@ -1,6 +1,7 @@
 const express=require('express');
 const app=express();
 const authRoutes = require( './routes/auth');
+const paymentRoutes = require( './routes/paymentRoutes');
 const mongoose = require('mongoose');
 const dotenv= require('dotenv');
 dotenv.config();
@@ -14,6 +15,7 @@ mongoose.connect(
 
 app.use(express.json());
 app.use('/api/user',authRoutes);
+app.use('/api/payments',paymentRoutes);
 app.listen(80, ()=> console.log('Server Up. Listening to port 80.........'));
  
 
