@@ -18,7 +18,7 @@ router.get('/getToken',async (req,res)=>{
 });
 
 router.post("/checkout", function (req, res) {
-    var nonceFromTheClient = "tokencc_bd_tqb3tz_2g3sj9_nhx3y7_cc5f4x_wg4";
+    var nonceFromTheClient = req.body.nounce;
     // Use payment method nonce here
 
     gateway.transaction.sale({
@@ -26,7 +26,7 @@ router.post("/checkout", function (req, res) {
         paymentMethodNonce: nonceFromTheClient
       }, function (err, result) {
 
-        console.log(result);
+       // console.log(result);
         res.send(result);
 
       });
