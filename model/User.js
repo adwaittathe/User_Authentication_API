@@ -30,6 +30,9 @@ const userSchema = new mongoose.Schema({
         required : true,
         max : 255
     },
+    customerId :{
+        type : String
+    },
     password : {
         type : String,
         min : 6,

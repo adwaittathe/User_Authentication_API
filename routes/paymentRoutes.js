@@ -53,7 +53,7 @@ router.post("/customer", function (req, res) {
 
 router.get("/paymentMethod", function (req, res) {
 
-  gateway.customer.find("676781211", function(err, customer) {
+  gateway.customer.find("167753779", function(err, customer) {
     res.send(customer); // array of PaymentMethod objects
   });
 

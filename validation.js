@@ -8,7 +8,9 @@ const signUpValidation = (data) =>{
         contactNo : Joi.string().required().min(10).max(10),
         age : Joi.string().required().min(1).max(3),
         email : Joi.string().required().email(),
-        password : Joi.string().required().min(6)
+        password : Joi.string().required().min(6),
+        customerId : Joi.string()
+
      });
      return schema.validate(data); 
 }

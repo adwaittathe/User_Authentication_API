@@ -1,9 +1,16 @@
  const router = require('express').Router();
  const userModel = require('../model/User');
+ var braintree = require('braintree');
  const { signUpValidation, loginValidation, updateValidation} = require('../validation');
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
  const verifyToken = require('../verifyToken');
+ var gateway = braintree.connect({
+    environment: braintree.Environment.Sandbox,
+    merchantId: "4wsx2kkvmdbbbg8k",
+    publicKey: "rdq6rdrt8d9qm3b4",
+    privateKey: "472fa51bbb9f2025359c9bd11c0e609d"
+  });
 
 router.post('/signUp', async (req,res)=>{ 
     
@@ -22,28 +29,50 @@ router.post('/signUp', async (req,res)=>{
 
     const salt = await bcrypt.genSalt(10);
     const hashPass =  await bcrypt.hash(req.body.password , salt);
-
-    const user =  new userModel({
-        firstName : req.body.firstName,
-        lastName : req.body.lastName,
-        gender : req.body.gender,
-        contactNo : req.body.contactNo,
-        age : req.body.age,
-        email : req.body.email,
-        password : hashPass
-    });
     try{
-        const saveUser = await user.save();
-        const token = jwt.sign({_id : user._id}, process.env.TOKEN_KEY);
-        res.header('token', token);
-        res.send({
-            status : res.statusCode,
-            token : token,
-            userId : user._id,
-            name : user.firstName + " " + user.lastName,
-            email : user.email,
-            contactNo : user.contactNo,
-        });
+        gateway.customer.create({
+            firstName : req.body.firstName,
+            lastName : req.body.lastName,
+            phone : req.body.phone,
+            email : req.body.email
+          }, async function (err, result) {
+            console.log(result);
+            if(result!=null)
+            {
+                const user =  new userModel({
+                    firstName : req.body.firstName,
+                    lastName : req.body.lastName,
+                    gender : req.body.gender,
+                    contactNo : req.body.contactNo,
+                    age : req.body.age,
+                    email : req.body.email,
+                    customerId : result.customer.id,
+                    password : hashPass
+                });
+
+                await user.save();
+                const token = jwt.sign({_id : user._id}, process.env.TOKEN_KEY);
+                res.header('token', token);
+                res.send({
+                status : res.statusCode,
+                token : token,
+                userId : user._id,
+                customerId : result.customer.id,
+                name : user.firstName + " " + user.lastName,
+                email : user.email,
+                contactNo : user.contactNo,
+                });
+
+            }
+            else{
+                res.status(400).send({
+                    status : res.statusCode,
+                    message : "Error creating user in Braintree" 
+                });
+            }
+            
+        })
+        
     }
     catch(err){
         res.status(400).send({
@@ -81,6 +110,7 @@ router.post('/login', async (req,res)=>{
         status : res.statusCode,
         id: user._id,
         token: token,
+        customerId : user.customerId,
         name : user.firstName + " " +  user.lastName,
         email : user.email
     })
