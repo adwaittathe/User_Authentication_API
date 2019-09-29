@@ -9,10 +9,10 @@ var gateway = braintree.connect({
 
 router.get('/getToken',async (req,res)=>{
     gateway.clientToken.generate({
-        //customerId: 1234
+        customerId: "masterclient3"
       }, function (err, response) {
         var clientToken = response.clientToken
-        res.send(clientToken);
+        res.send(response);
     });
 
 });
@@ -22,13 +22,15 @@ router.post("/checkout", function (req, res) {
     // Use payment method nonce here
 
     gateway.transaction.sale({
-        amount: "3.00",
-        paymentMethodNonce: nonceFromTheClient
-      }, function (err, result) {
-
+        amount: "3. 00",
+        paymentMethodNonce: nonceFromTheClient,
+        options: {
+            storeInVaultOnSuccess: true
+          }
+      }, 
+      function (err, result) {
         console.log(result);
         res.send(result);
-
       });
   });
 
