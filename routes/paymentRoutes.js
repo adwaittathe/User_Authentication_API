@@ -19,14 +19,10 @@ router.post('/getToken',async (req,res)=>{
 
 router.post("/checkout", function (req, res) {
     var nonceFromTheClient = req.body.nounce;
-    // Use payment method nonce here
-
     gateway.transaction.sale({
-        amount: "3.00",
+        amount: req.body.amount,
         paymentMethodNonce: nonceFromTheClient
       }, function (err, result) {
-
-       // console.log(result);
         res.send(result);
       });
     
