@@ -10,9 +10,8 @@ var gateway = braintree.connect({
 
 router.get('/getToken',async (req,res)=>{
     gateway.clientToken.generate({
-        customerId: "676781211"
+        customerId: req.body.customerId
       }, function (err, response) {
-        var clientToken = response.clientToken
         res.send(response);
     });
 
