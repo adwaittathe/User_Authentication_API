@@ -8,7 +8,7 @@ var gateway = braintree.connect({
     privateKey: "472fa51bbb9f2025359c9bd11c0e609d"
   });
 
-router.get('/getToken',async (req,res)=>{
+router.post('/getToken',async (req,res)=>{
     gateway.clientToken.generate({
         customerId: req.body.customerId
       }, function (err, response) {
@@ -53,7 +53,7 @@ router.post("/customer", function (req, res) {
 
 router.get("/paymentMethod", function (req, res) {
 
-  gateway.customer.find("167753779", function(err, customer) {
+  gateway.customer.find("695861404", function(err, customer) {
     res.send(customer); // array of PaymentMethod objects
   });
 

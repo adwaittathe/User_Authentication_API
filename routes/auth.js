@@ -163,6 +163,14 @@ router.put('/update', verifyToken, async(req,res)=>{
             }
         });
 
+        gateway.customer.update(user.customerId, {
+            firstName : req.body.firstName,
+            lastName : req.body.lastName,
+            phone : req.body.phone,
+            email : req.body.email
+          }, function (err, result) {
+              
+        });
     res.status(200).send({
         status: res.statusCode,
         message : "User details updated successfully"
