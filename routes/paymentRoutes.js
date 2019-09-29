@@ -1,5 +1,6 @@
 const router = require('express').Router();
 var braintree = require('braintree');
+const { signUpValidation, loginValidation, updateValidation} = require('../validation');
 var gateway = braintree.connect({
     environment: braintree.Environment.Sandbox,
     merchantId: "4wsx2kkvmdbbbg8k",
@@ -9,7 +10,7 @@ var gateway = braintree.connect({
 
 router.get('/getToken',async (req,res)=>{
     gateway.clientToken.generate({
-        customerId: "masterclient3"
+        customerId: "676781211"
       }, function (err, response) {
         var clientToken = response.clientToken
         res.send(response);
@@ -18,29 +19,49 @@ router.get('/getToken',async (req,res)=>{
 });
 
 router.post("/checkout", function (req, res) {
-    var nonceFromTheClient = "tokencc_bd_tqb3tz_2g3sj9_nhx3y7_cc5f4x_wg4";
+    var nonceFromTheClient = req.body.nounce;
     // Use payment method nonce here
 
     gateway.transaction.sale({
-        amount: "3. 00",
-        paymentMethodNonce: nonceFromTheClient,
-        options: {
-            storeInVaultOnSuccess: true
-          }
-      }, 
-      function (err, result) {
-        console.log(result);
+        amount: "3.00",
+        paymentMethodNonce: nonceFromTheClient
+      }, function (err, result) {
+
+       // console.log(result);
         res.send(result);
       });
+    
+});
+
+
+router.post("/customer", function (req, res) {
+  gateway.customer.create({
+    firstName : req.body.firstName,
+    lastName : req.body.lastName,
+    phone : req.body.phone,
+    email : req.body.email,
+  
+    
+  }, function (err, result) {
+    result.success;
+    result.customer.id;
+    res.send(result);
+  })
+});
+
+
+
+
+router.get("/paymentMethod", function (req, res) {
+
+  gateway.customer.find("676781211", function(err, customer) {
+    res.send(customer); // array of PaymentMethod objects
   });
 
 
-
+});
 
 
 
 
 module.exports = router;
-
-
-
