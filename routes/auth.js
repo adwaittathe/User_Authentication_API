@@ -169,14 +169,13 @@ router.put('/update', verifyToken, async(req,res)=>{
             phone : req.body.phone,
             email : req.body.email
           }, function (err, result) {
-              
+
         });
     res.status(200).send({
         status: res.statusCode,
         message : "User details updated successfully"
     });
 });
-
 
 router.delete('/delete', verifyToken, async(req,res)=>{
     const user = await userModel.findOne({_id : req.user._id});

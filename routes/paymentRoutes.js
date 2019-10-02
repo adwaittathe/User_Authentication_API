@@ -44,9 +44,6 @@ router.post("/customer", function (req, res) {
   })
 });
 
-
-
-
 router.get("/paymentMethod", function (req, res) {
 
   gateway.customer.find("695861404", function(err, customer) {
