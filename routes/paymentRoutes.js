@@ -8,7 +8,7 @@ var gateway = braintree.connect({
     privateKey: "472fa51bbb9f2025359c9bd11c0e609d"
   });
 
-var Simplify = require("simplify-commerce");
+//var Simplify = require("simplify-commerce");
 const stripe = require("stripe")("sk_test_3U6Sk478c55ftUaMFhv4WxLJ002cKPlTa3");
 
 router.post('/getToken',async (req,res)=>{
@@ -31,6 +31,39 @@ router.post("/checkout", function (req, res) {
     
 });
 
+router.post("/Stripecheckout", function (req, res) {
+stripe.paymentIntents.create(
+    {
+      amount: req.body.amount,
+      currency: 'usd',
+      payment_method : req.body.stripeId,
+      customer : req.body.customerId
+    },
+    function(err, paymentIntent) {
+      if(err)
+      {
+        res.send(err);
+      }
+      else{
+        stripe.paymentIntents.confirm(paymentIntent.id,
+       {
+        payment_method: req.body.stripeId,
+        save_payment_method : true
+       } ,
+       function(err, intent) {
+        if(err)
+        {
+          res.send(err);
+        }
+        else{
+         // console.log(intent);
+          res.send(intent);   
+        }
+      }); 
+    }
+   }
+  );
+});
 
 router.post("/Simplifycheckout", function (req, res) {
  
@@ -116,17 +149,17 @@ router.post("/Simplifycheckout", function (req, res) {
 //   console.log("Success Response: " + JSON.stringify(data));
 // });
 
-client.cardtoken.find("9d8b045a-f890-4273-b83a-53cf1c180a16", function(errData, data){
+// client.cardtoken.find("9d8b045a-f890-4273-b83a-53cf1c180a16", function(errData, data){
  
-  if(errData){
-      console.error("Error Message: " + errData.data.error.message);
-      // handle the error
-      return;
-  }
+//   if(errData){
+//       console.error("Error Message: " + errData.data.error.message);
+//       // handle the error
+//       return;
+//   }
 
-  res.send(data);
-  console.log("Success Response: " + JSON.stringify(data));
-});
+//   res.send(data);
+//   console.log("Success Response: " + JSON.stringify(data));
+// });
 
 //   client.customer.update({
 //     id: "RMpxXzekq", // ID of object to update
@@ -183,6 +216,21 @@ router.post("/customer", function (req, res) {
     lastName : req.body.lastName,
     phone : req.body.phone,
     email : req.body.email,
+
+  }, function (err, result) {
+    result.success;
+    result.customer.id;
+    res.send(result);
+  })
+});
+
+
+router.post("/Stripe", function (req, res) {
+  gateway.customer.create({
+    firstName : req.body.firstName,
+    lastName : req.body.lastName,
+    phone : req.body.phone,
+    email : req.body.email,
   
     
   }, function (err, result) {
@@ -197,16 +245,80 @@ router.post("/customer", function (req, res) {
 
 router.post("/Stripe_customer", function (req, res) {
  
-  stripe.customers.create({
-    description: 'Customer for jenny.rosen@example.com',
-    name : "iii jjj",
-    email : "iii.jjj@gmail.com"
-    //source: "src_18eYalAHEMiOZZp1l9ZTjSU0" // obtained with Stripe.js
-  }, function(err, customer) {
-    res.send(customer);
-    //res.send("created")
-    // asynchronously called
-  });
+  // stripe.customers.create({
+  //   description: 'Customer for jenny.rosen@example.com',
+  //   name : "iii jjj",
+  //   email : "iii.jjj@gmail.com"
+  //   //source: "src_18eYalAHEMiOZZp1l9ZTjSU0" // obtained with Stripe.js
+  // }, function(err, customer) {
+  //   res.send(customer);
+  //   //res.send("created")
+  //   // asynchronously called
+  // });
+  // stripe.paymentMethods.attach('pm_1FRQLsKTsS1Q0ynF8o4kfrI5', {customer: 'cus_FxKWVcWVGZN73n'}, 
+  // function(err, paymentMethod) {
+  //   if(err)
+  //   {
+  //     res.send(err)
+  //   }
+  //   else{
+  //     res.send(paymentMethod)
+  //   }
+  // });
+
+  // stripe.paymentIntents.create(
+  //   {
+  //     amount: 1523,
+  //     currency: 'usd',
+  //     payment_method : 'pm_1FRR5BKTsS1Q0ynF8tPWuiFy',
+  //     customer : 'cus_FxKV3Sf16HsJ0D'
+  //   },
+  //   function(err, paymentIntent) {
+  //     if(err)
+  //     {
+  //       res.send(err);
+  //     }
+  //     else{
+  //       stripe.paymentIntents.confirm(paymentIntent.id,
+  //      {
+  //       payment_method: 'pm_1FRR5BKTsS1Q0ynF8tPWuiFy',
+  //       save_payment_method : true
+  //      }
+  //      ,function(err, intent) {
+  //       if(err)
+  //       {
+  //         res.send(err);
+  //       }
+  //       else{
+  
+  //         console.log(intent);
+  //         res.send(intent);
+          
+  //       }
+  
+  // });
+  //       console.log(paymentIntent.id);
+  //       res.send(paymentIntent);  
+  //     }
+  //   }
+  // );
+
+  // stripe.charges.create({
+  //   amount: 2000,
+  //   currency: "usd",
+  //   source: paymentIntent.id// obtained with Stripe.js
+  // }, function(err, charge) {
+  //   if(err)
+  //   {
+  //     res.send(err)
+  //   }
+  //   else{
+  //     //console.log();
+  //     res.send(charge)
+  //   } 
+  // });
+ 
+
 
   // stripe.paymentMethods.create({
   //   type: "card",
@@ -222,24 +334,31 @@ router.post("/Stripe_customer", function (req, res) {
   // });
 
 
+  stripe.paymentMethods.list(
+    {customer: 'cus_FxKV3Sf16HsJ0D', type: 'card'},
+    function(err, paymentMethods) {
+      res.send(paymentMethods);
+    }
+  );
+
   // stripe.customers.retrieve(
-  //   'cus_FxJF9jbzhQjNFF',
+  //   'cus_FxKV3Sf16HsJ0D',
   //   function(err, customer) {
   //    res.send(customer);
   //   }
   // );
-  stripe.customers.retrieve(
-    'cus_FxJUspH9NYdIv5',
-    function(err, customer) {
-      res.send(customer);
-      let cardlist = [];
-      for(let i=0; i< customer.sources.data.length;i++)
-      {
-        console.log("FINGERPRINT " + customer.sources.data[i].card.fingerprint);
-      }
-      // asynchronously called
-    }
-  );
+  // stripe.customers.retrieve(
+  //   'cus_FxJUspH9NYdIv5',
+  //   function(err, customer) {
+  //     res.send(customer);
+  //     let cardlist = [];
+  //     for(let i=0; i< customer.sources.data.length;i++)
+  //     {
+  //       console.log("FINGERPRINT " + customer.sources.data[i].card.fingerprint);
+  //     }
+  //     // asynchronously called
+  //   }
+  // );
   // stripe.sources.create({
   //   type: 'card',
   //   currency: 'usd',
@@ -271,10 +390,7 @@ router.post("/Stripe_customer", function (req, res) {
           
   //         // asynchronously called
   //       }
-  //     );
-
-      
-
+  //     );x
   //     res.send(source);
   //   } 
   //   else{
@@ -314,14 +430,9 @@ router.post("/Stripe_customer", function (req, res) {
   //   // asynchronously called
   // });
 
-
-
-  
-
 });
 
 router.get("/paymentMethod", function (req, res) {
-
   gateway.customer.find("695861404", function(err, customer) {
     res.send(customer); // array of PaymentMethod objects
   });
