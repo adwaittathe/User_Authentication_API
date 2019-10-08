@@ -5,6 +5,11 @@
  const bcrypt = require('bcryptjs');
  const jwt = require('jsonwebtoken');
  const verifyToken = require('../verifyToken');
+ //const createCustomer =  require('../model/createCustomer');
+
+ const stripe = require("stripe")("sk_test_3U6Sk478c55ftUaMFhv4WxLJ002cKPlTa3");
+
+
  var gateway = braintree.connect({
     environment: braintree.Environment.Sandbox,
     merchantId: "4wsx2kkvmdbbbg8k",
@@ -29,49 +34,99 @@ router.post('/signUp', async (req,res)=>{
 
     const salt = await bcrypt.genSalt(10);
     const hashPass =  await bcrypt.hash(req.body.password , salt);
+   
+    
     try{
-        gateway.customer.create({
-            firstName : req.body.firstName,
-            lastName : req.body.lastName,
-            phone : req.body.phone,
-            email : req.body.email
-          }, async function (err, result) {
-            console.log(result);
-            if(result!=null)
-            {
-                const user =  new userModel({
-                    firstName : req.body.firstName,
-                    lastName : req.body.lastName,
-                    gender : req.body.gender,
-                    contactNo : req.body.contactNo,
-                    age : req.body.age,
-                    email : req.body.email,
-                    customerId : result.customer.id,
-                    password : hashPass
-                });
+        //console.log("SIGN UP");
 
-                await user.save();
-                const token = jwt.sign({_id : user._id}, process.env.TOKEN_KEY);
-                res.header('token', token);
-                res.send({
-                status : res.statusCode,
-                token : token,
-                userId : user._id,
-                customerId : result.customer.id,
-                name : user.firstName + " " + user.lastName,
-                email : user.email,
-                contactNo : user.contactNo,
-                });
 
-            }
-            else{
-                res.status(400).send({
+        stripe.customers.create({
+              name : req.body.firstName,
+              email : req.body.email
+            }, 
+            async function(err, customer) {
+
+                if(customer!=null)
+                {
+                    const user =  new userModel({
+                        firstName : req.body.firstName,
+                        lastName : req.body.lastName,
+                        gender : req.body.gender,
+                        contactNo : req.body.contactNo,
+                        age : req.body.age,
+                        email : req.body.email,
+                        customerId : customer.id,
+                        password : hashPass
+                    });
+                    await user.save();
+                    const token = jwt.sign({_id : user._id}, process.env.TOKEN_KEY);
+                    res.header('token', token);        
+                    res.send({
                     status : res.statusCode,
-                    message : "Error creating user in Braintree" 
-                });
-            }
+                    token : token,
+                    userId : user._id,
+                    customerId : customer.id,
+                    name : user.firstName + " " + user.lastName,
+                    email : user.email,
+                    contactNo : user.contactNo,
+                    });
+
+                }
+                else{
+
+                    res.status(400).send({
+                        status : res.statusCode,
+                        message : "Error creating user in Stripe" 
+                    });
+
+                }
+           
+        });
+
+        // gateway.customer.create({
+        //     firstName : req.body.firstName,
+        //     lastName : req.body.lastName,
+        //     phone : req.body.phone,
+        //     email : req.body.email
+        //   }, async function (err, result) {
+        //    // console.log(result);
+        //     if(result!=null)
+        //     {
+        //         const user =  new userModel({
+        //             firstName : req.body.firstName,
+        //             lastName : req.body.lastName,
+        //             gender : req.body.gender,
+        //             contactNo : req.body.contactNo,
+        //             age : req.body.age,
+        //             email : req.body.email,
+        //             customerId : result.customer.id,
+        //             password : hashPass
+        //         });
+
+
+        //             await user.save();
+        //             console.log("USER SAVE DONE ");
+        //             const token = jwt.sign({_id : user._id}, process.env.TOKEN_KEY);
+        //             res.header('token', token);        
+        //             res.send({
+        //             status : res.statusCode,
+        //             token : token,
+        //             userId : user._id,
+        //             customerId : result.customer.id,
+        //             simplifyCustId : data.id,
+        //             name : user.firstName + " " + user.lastName,
+        //             email : user.email,
+        //             contactNo : user.contactNo,
+        //             });
+        //     }
+        //     else{
+        //         res.status(400).send({
+        //             status : res.statusCode,
+        //             message : "Error creating user in Braintree" 
+        //         });
+        //     }
             
-        })
+        // })
         
     }
     catch(err){
@@ -82,6 +137,8 @@ router.post('/signUp', async (req,res)=>{
     }
 
 });
+
+
 
 router.post('/login', async (req,res)=>{
 
@@ -189,5 +246,8 @@ router.delete('/delete', verifyToken, async(req,res)=>{
         message : "User details deleted successfully"
     });
 });
+
+
+
 
 module.exports = router;
