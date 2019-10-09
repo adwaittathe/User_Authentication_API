@@ -31,7 +31,41 @@ router.post("/checkout", function (req, res) {
     
 });
 
+router.post("/ephemeralKeys", function (req, res){
+  stripe.ephemeralKeys.create(
+    {customer: req.body.customerId},
+    {stripe_version: "2019-10-08"}
+  ).then((key) => {
+    //console.log("KEY");
+    
+    //res.send(key);
+    res.status(200).json(key);
+  }).catch((err) => {
+   // console.log(err);
+    res.send(err);
+    //res.status(500).end();
+  });
+
+});
+
 router.post("/Stripecheckout", function (req, res) {
+
+  
+
+
+// stripe.customers.retrieve(
+//     'cus_FxJUspH9NYdIv5',
+//     function(err, customer) {
+     
+//       let cardlist = [];
+//       for(let i=0; i< customer.sources.data.length;i++)
+//       {
+//         cardlist.push(customer.sources.data[i].card.fingerprint)
+//       }
+//       res.send(cardlist);
+//       // asynchronously called
+//     }
+//   );
 stripe.paymentIntents.create(
     {
       amount: req.body.amount,
@@ -56,7 +90,6 @@ stripe.paymentIntents.create(
           res.send(err);
         }
         else{
-         // console.log(intent);
           res.send(intent);   
         }
       }); 
