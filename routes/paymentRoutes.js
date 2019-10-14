@@ -50,9 +50,6 @@ router.post("/ephemeralKeys", function (req, res){
 
 router.post("/Stripecheckout", function (req, res) {
 
-  
-
-
 // stripe.customers.retrieve(
 //     'cus_FxJUspH9NYdIv5',
 //     function(err, customer) {
@@ -101,10 +98,10 @@ stripe.paymentIntents.create(
 router.post("/Simplifycheckout", function (req, res) {
  
 
-  client = Simplify.getClient({
-    publicKey: process.env.simplify_publicKey,
-    privateKey: process.env.simplify_privateKey
-  });
+  // client = Simplify.getClient({
+  //   publicKey: process.env.simplify_publicKey,
+  //   privateKey: process.env.simplify_privateKey
+  // });
 
 
 //   client.customer.find("8qpd7eBE6", function(errData, data){
@@ -243,35 +240,35 @@ router.post("/Simplifycheckout", function (req, res) {
 });
 
 
-router.post("/customer", function (req, res) {
-  gateway.customer.create({
-    firstName : req.body.firstName,
-    lastName : req.body.lastName,
-    phone : req.body.phone,
-    email : req.body.email,
+// router.post("/customer", function (req, res) {
+//   gateway.customer.create({
+//     firstName : req.body.firstName,
+//     lastName : req.body.lastName,
+//     phone : req.body.phone,
+//     email : req.body.email,
 
-  }, function (err, result) {
-    result.success;
-    result.customer.id;
-    res.send(result);
-  })
-});
+//   }, function (err, result) {
+//     result.success;
+//     result.customer.id;
+//     res.send(result);
+//   })
+// });
 
 
-router.post("/Stripe", function (req, res) {
-  gateway.customer.create({
-    firstName : req.body.firstName,
-    lastName : req.body.lastName,
-    phone : req.body.phone,
-    email : req.body.email,
+// router.post("/Stripe", function (req, res) {
+//   gateway.customer.create({
+//     firstName : req.body.firstName,
+//     lastName : req.body.lastName,
+//     phone : req.body.phone,
+//     email : req.body.email,
   
     
-  }, function (err, result) {
-    result.success;
-    result.customer.id;
-    res.send(result);
-  })
-});
+//   }, function (err, result) {
+//     result.success;
+//     result.customer.id;
+//     res.send(result);
+//   })
+// });
 
 
 
