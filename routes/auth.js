@@ -40,93 +40,93 @@ router.post('/signUp', async (req,res)=>{
         //console.log("SIGN UP");
 
 
-        stripe.customers.create({
-              name : req.body.firstName,
-              email : req.body.email
-            }, 
-            async function(err, customer) {
+        // stripe.customers.create({
+        //       name : req.body.firstName,
+        //       email : req.body.email
+        //     }, 
+        //     async function(err, customer) {
 
-                if(customer!=null)
-                {
-                    const user =  new userModel({
-                        firstName : req.body.firstName,
-                        lastName : req.body.lastName,
-                        gender : req.body.gender,
-                        contactNo : req.body.contactNo,
-                        age : req.body.age,
-                        email : req.body.email,
-                        customerId : customer.id,
-                        password : hashPass
-                    });
-                    await user.save();
-                    const token = jwt.sign({_id : user._id}, process.env.TOKEN_KEY);
-                    res.header('token', token);        
-                    res.send({
-                    status : res.statusCode,
-                    token : token,
-                    userId : user._id,
-                    customerId : customer.id,
-                    name : user.firstName + " " + user.lastName,
-                    email : user.email,
-                    contactNo : user.contactNo,
-                    });
-
-                }
-                else{
-
-                    res.status(400).send({
-                        status : res.statusCode,
-                        message : "Error creating user in Stripe" 
-                    });
-
-                }
-           
-        });
-
-        // gateway.customer.create({
-        //     firstName : req.body.firstName,
-        //     lastName : req.body.lastName,
-        //     phone : req.body.phone,
-        //     email : req.body.email
-        //   }, async function (err, result) {
-        //    // console.log(result);
-        //     if(result!=null)
-        //     {
-        //         const user =  new userModel({
-        //             firstName : req.body.firstName,
-        //             lastName : req.body.lastName,
-        //             gender : req.body.gender,
-        //             contactNo : req.body.contactNo,
-        //             age : req.body.age,
-        //             email : req.body.email,
-        //             customerId : result.customer.id,
-        //             password : hashPass
-        //         });
-
-
+        //         if(customer!=null)
+        //         {
+        //             const user =  new userModel({
+        //                 firstName : req.body.firstName,
+        //                 lastName : req.body.lastName,
+        //                 gender : req.body.gender,
+        //                 contactNo : req.body.contactNo,
+        //                 age : req.body.age,
+        //                 email : req.body.email,
+        //                 customerId : customer.id,
+        //                 password : hashPass
+        //             });
         //             await user.save();
-        //             console.log("USER SAVE DONE ");
         //             const token = jwt.sign({_id : user._id}, process.env.TOKEN_KEY);
         //             res.header('token', token);        
         //             res.send({
         //             status : res.statusCode,
         //             token : token,
         //             userId : user._id,
-        //             customerId : result.customer.id,
-        //             simplifyCustId : data.id,
+        //             customerId : customer.id,
         //             name : user.firstName + " " + user.lastName,
         //             email : user.email,
         //             contactNo : user.contactNo,
         //             });
-        //     }
-        //     else{
-        //         res.status(400).send({
-        //             status : res.statusCode,
-        //             message : "Error creating user in Braintree" 
-        //         });
-        //     }
+
+        //         }
+        //         else{
+
+        //             res.status(400).send({
+        //                 status : res.statusCode,
+        //                 message : "Error creating user in Stripe" 
+        //             });
+
+        //         }
+           
+        // });
+
+        gateway.customer.create({
+            firstName : req.body.firstName,
+            lastName : req.body.lastName,
+            phone : req.body.phone,
+            email : req.body.email
+          }, async function (err, result) {
+           // console.log(result);
+            if(result!=null)
+            {
+                const user =  new userModel({
+                    firstName : req.body.firstName,
+                    lastName : req.body.lastName,
+                    gender : req.body.gender,
+                    contactNo : req.body.contactNo,
+                    age : req.body.age,
+                    email : req.body.email,
+                    customerId : result.customer.id,
+                    password : hashPass
+                });
+
+
+                    await user.save();
+                    console.log("USER SAVE DONE ");
+                    const token = jwt.sign({_id : user._id}, process.env.TOKEN_KEY);
+                    res.header('token', token);        
+                    res.send({
+                    status : res.statusCode,
+                    token : token,
+                    userId : user._id,
+                    customerId : result.customer.id,
+                    //simplifyCustId : data.id,
+                    name : user.firstName + " " + user.lastName,
+                    email : user.email,
+                    contactNo : user.contactNo,
+                    });
+            }
+            else{
+                res.status(400).send({
+                    status : res.statusCode,
+                    message : "Error creating user in Braintree" 
+                });
+            }
             
-        // })
+        })
         
     }
     catch(err){
