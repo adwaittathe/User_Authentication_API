@@ -3,7 +3,7 @@ const userModel = require('../model/User');
 const jwt = require('jsonwebtoken');
 const verifyToken = require('../verifyToken');
 
-router.get('/getJudgeProfile' , verifyToken   ,function (req, res) {
+router.get('/getJudgeProfile' , verifyToken   ,async function (req, res) {
     const user = await userModel.findOne({_id : req.user._id});
     if(!user) return res.status(400).send({
         status : res.statusCode,
