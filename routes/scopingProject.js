@@ -90,7 +90,10 @@ router.post('/getTeamById' , verifyToken   ,async function (req, res) {
         message : 'Error while finding user in database'
     });
     const team = await teamModel.findOne({teamId : req.body.teamId});
-    
+    if(!team) return res.status(400).send({
+        status : res.statusCode,
+        message : 'Error while finding team in database'
+    });
     res.send({
         status : res.statusCode,
         teamId : team.id,
