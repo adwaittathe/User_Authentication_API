@@ -1,7 +1,10 @@
 const router = require('express').Router();
 const userModel = require('../model/User');
+const teamModel = require('../model/team');
 const jwt = require('jsonwebtoken');
 const verifyToken = require('../verifyToken');
+
+
 
 router.get('/getJudgeProfile' , verifyToken   ,async function (req, res) {
     const user = await userModel.findOne({_id : req.user._id});
@@ -9,6 +12,62 @@ router.get('/getJudgeProfile' , verifyToken   ,async function (req, res) {
         status : res.statusCode,
         message : 'Error while finding user in database'
     });
+
+    
+    // team = [
+    //     {
+    //     "id":"1",
+    //     "name" : "TechGeeks",
+    //     "score" : {}
+    //     },
+    //     {
+    //     "id":"2",    
+    //     "name" : "3idiots",
+    //     "score" : {}
+    //     },
+    //     {
+    //     "id":"3",
+    //     "name" : "JustDoIt",
+    //     "score" : {}
+    //     },
+    //     {
+    //     "id":"4",
+    //     "name" : "Dragons",
+    //     "score" : {}
+    //     }
+    // ]
+
+    // scoreDict = {}
+    // scoreDict[user.id] = "100";
+    // scoreDict["12"] = "80";
+    // scoreDict["mm"] = "90";
+    // scoreDict["mm"] = "2010";
+    // scoreP = [
+    //     {
+    //         email : "xyz@gmail.com",
+    //         score : "100"
+    //     },
+    //     {
+    //         email : "abc@gmail.com",
+    //         score : "90"
+    //     },
+    //     {
+    //         email : "pqr@gmail.com",
+    //         score : "80"
+    //     }
+    // ]
+
+    // for(let i=0;i<team.length;i++){
+    //     const teamObj =  new teamModel({
+    //         teamId : team[i].id,
+    //         name : team[i].name,
+    //         score : team[i].score,
+    //     });
+    //     console.log(teamObj);
+    //     await teamObj.save();
+    // }
+
+    
 
     res.send({
         status : res.statusCode,
@@ -22,5 +81,24 @@ router.get('/getJudgeProfile' , verifyToken   ,async function (req, res) {
         createdAt : user.createdAt
     });
 })
+
+
+router.post('/getTeamById' , verifyToken   ,async function (req, res) {
+    const user = await userModel.findOne({_id : req.user._id});
+    if(!user) return res.status(400).send({
+        status : res.statusCode,
+        message : 'Error while finding user in database'
+    });
+    const team = await teamModel.findOne({teamId : req.body.teamId});
+    
+    res.send({
+        status : res.statusCode,
+        teamId : team.id,
+        name : team.name, 
+        score : team.score
+    });  
+})
+
+
 
 module.exports = router;
