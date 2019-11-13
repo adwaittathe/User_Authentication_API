@@ -21,7 +21,8 @@ router.post('/signUp', async (req,res)=>{
     
     const { error } = signUpValidation(req.body);
 
-    if(error) return res.status(400).send({
+    if(error) return res.status(
+        400).send({
         status : res.statusCode,
         message: error.details[0].message
     });

@@ -2,16 +2,16 @@ const mongoose =  require('mongoose');
  
 const teamSchema = new mongoose.Schema({
     teamId : {
-        type : String,
-        //required : true
+        type : String
     },
     name : {
-        type : String,
-        //required : true
+        type : String
     },
     score : {
-        type : Object,
-        //required : true
+        type : Object
+    },
+    finalScore : {
+        type : String
     }
 });
 
