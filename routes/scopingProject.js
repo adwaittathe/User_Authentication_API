@@ -12,8 +12,6 @@ router.get('/getJudgeProfile' , verifyToken   ,async function (req, res) {
         status : res.statusCode,
         message : 'Error while finding user in database'
     });
-
-    
     // team = [
     //     {
     //     "id":"1",
@@ -36,39 +34,16 @@ router.get('/getJudgeProfile' , verifyToken   ,async function (req, res) {
     //     "score" : {}
     //     }
     // ]
-
-    // scoreDict = {}
-    // scoreDict[user.id] = "100";
-    // scoreDict["12"] = "80";
-    // scoreDict["mm"] = "90";
-    // scoreDict["mm"] = "2010";
-    // scoreP = [
-    //     {
-    //         email : "xyz@gmail.com",
-    //         score : "100"
-    //     },
-    //     {
-    //         email : "abc@gmail.com",
-    //         score : "90"
-    //     },
-    //     {
-    //         email : "pqr@gmail.com",
-    //         score : "80"
-    //     }
-    // ]
-
     // for(let i=0;i<team.length;i++){
     //     const teamObj =  new teamModel({
     //         teamId : team[i].id,
     //         name : team[i].name,
-    //         score : team[i].score,
+    //         score : {},
+    //         finalScore : "0"
     //     });
-    //     console.log(teamObj);
+    //     //console.log(teamObj);
     //     await teamObj.save();
     // }
-
-    
-
     res.send({
         status : res.statusCode,
         userId : user._id,
@@ -119,17 +94,13 @@ router.post('/sendScoreForTeam' , verifyToken, async function (req, res) {
         dictData = team.score      
     }
     dictData[user.id]= req.body.score
-
     let sum = 0;
     for (var key in dictData) {
         var value = dictData[key];
         sum+= parseInt(value);
     }
     var size = Object.keys(dictData).length;
-    //console.log(sum);
     sum = sum/size;
-    //console.log(sum);
-    
     await teamModel.findByIdAndUpdate({_id : team._id},{
     $set:{
         score : dictData,
@@ -148,11 +119,12 @@ router.get('/getTeamScore' , verifyToken, async function (req, res) {
         status : res.statusCode,
         message : 'Error while finding user in database'
     });
-    const team = await teamModel.find();
+    let team = await teamModel.find();
     if(!team) return res.status(400).send({
         status : res.statusCode,
         message : 'Error while finding team in database'
     });
+    team = team.sort((a, b) => (parseInt(a.finalScore) > parseInt(b.finalScore)) ? -1 : 1)
     res.send({
         status : res.statusCode,
         team : team
