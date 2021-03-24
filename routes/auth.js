@@ -7,7 +7,7 @@
  const verifyToken = require('../verifyToken');
  //const createCustomer =  require('../model/createCustomer');
 
- const stripe = require("stripe")("sk_test_3U6Sk478c55ftUaMFhv4WxLJ002cKPlTa3");
+ const stripe = require("stripe")("");
 
 
  var gateway = braintree.connect({
