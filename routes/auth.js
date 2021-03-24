@@ -12,9 +12,9 @@
 
  var gateway = braintree.connect({
     environment: braintree.Environment.Sandbox,
-    merchantId: "4wsx2kkvmdbbbg8k",
-    publicKey: "rdq6rdrt8d9qm3b4",
-    privateKey: "472fa51bbb9f2025359c9bd11c0e609d"
+    merchantId: "",
+    publicKey: "",
+    privateKey: ""
   });
 
 router.post('/signUp', async (req,res)=>{ 
